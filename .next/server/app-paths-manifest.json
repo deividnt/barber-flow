@@ -1,0 +1,18 @@
+{
+  "/agendar/[slug]/page": "app/agendar/[slug]/page.js",
+  "/api/settings/barbershop/route": "app/api/settings/barbershop/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/finances/chart/route": "app/api/finances/chart/route.js",
+  "/api/appointments/route": "app/api/appointments/route.js",
+  "/api/clients/route": "app/api/clients/route.js",
+  "/api/services/route": "app/api/services/route.js",
+  "/api/barbers/route": "app/api/barbers/route.js",
+  "/api/products/route": "app/api/products/route.js",
+  "/api/settings/retention/route": "app/api/settings/retention/route.js",
+  "/(dashboard)/dashboard/team/page": "app/(dashboard)/dashboard/team/page.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/dashboard/appointments/page": "app/(dashboard)/dashboard/appointments/page.js",
+  "/(dashboard)/dashboard/services/page": "app/(dashboard)/dashboard/services/page.js",
+  "/(dashboard)/dashboard/inventory/page": "app/(dashboard)/dashboard/inventory/page.js",
+  "/(dashboard)/dashboard/settings/page": "app/(dashboard)/dashboard/settings/page.js"
+}

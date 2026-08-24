@@ -1,0 +1,285 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  BARBER
+  CLIENT
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+  OTHER
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  SALE
+  ADJUSTMENT
+}
+
+enum NotificationType {
+  RETENTION
+  BIRTHDAY
+  STOCK
+  GENERAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(CLIENT)
+  phone     String?
+  avatar    String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  barber    Barber?
+
+  @@map("users")
+}
+
+model Barbershop {
+  id               String   @id @default(cuid())
+  name             String
+  slug             String   @unique
+  address          String?
+  phone            String?
+  email            String?
+  logo             String?
+  description      String?
+  openTime         String   @default("08:00")
+  closeTime        String   @default("20:00")
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  barbers          Barber[]
+  services         Service[]
+  clients          Client[]
+  appointments     Appointment[]
+  products         Product[]
+  sales            Sale[]
+  transactions     FinancialTransaction[]
+  notifications    Notification[]
+  retentionConfigs RetentionConfig[]
+  stockMovements   StockMovement[]
+
+  @@map("barbershops")
+}
+
+model Barber {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  barbershopId String
+  specialty    String?
+  bio          String?
+  commission   Float    @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  appointments Appointment[]
+  schedules   BarberSchedule[]
+
+  @@map("barbers")
+}
+
+model Service {
+  id           String   @id @default(cuid())
+  barbershopId String
+  name         String
+  description  String?
+  durationMin  Int      @default(30)
+  price        Float
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  barbershop   Barbershop    @relation(fields: [barbershopId], references: [id])
+  appointments Appointment[]
+
+  @@map("services")
+}
+
+model Client {
+  id           String    @id @default(cuid())
+  barbershopId String
+  name         String
+  email        String?
+  phone        String?
+  birthDate    DateTime?
+  notes        String?
+  lastVisitAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  barbershop    Barbershop     @relation(fields: [barbershopId], references: [id])
+  appointments  Appointment[]
+  sales         Sale[]
+  notifications Notification[]
+
+  @@map("clients")
+}
+
+model Appointment {
+  id           String            @id @default(cuid())
+  barbershopId String
+  clientId     String
+  barberId     String
+  serviceId    String
+  status       AppointmentStatus @default(PENDING)
+  scheduledAt  DateTime
+  endsAt       DateTime
+  notes        String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  client       Client     @relation(fields: [clientId], references: [id])
+  barber       Barber     @relation(fields: [barberId], references: [id])
+  service      Service    @relation(fields: [serviceId], references: [id])
+
+  @@map("appointments")
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  barbershopId String
+  name         String
+  description  String?
+  category     String?
+  unit         String   @default("UN")
+  stockQty     Float    @default(0)
+  minStock     Float    @default(0)
+  costPrice    Float    @default(0)
+  salePrice    Float    @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  barbershop   Barbershop      @relation(fields: [barbershopId], references: [id])
+  movements    StockMovement[]
+  saleItems    SaleItem[]
+
+  @@map("products")
+}
+
+model StockMovement {
+  id           String            @id @default(cuid())
+  productId    String
+  barbershopId String
+  type         StockMovementType
+  qty          Float
+  reason       String?
+  createdAt    DateTime          @default(now())
+  product      Product    @relation(fields: [productId], references: [id])
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  @@map("stock_movements")
+}
+
+model Sale {
+  id            String        @id @default(cuid())
+  barbershopId  String
+  clientId      String?
+  paymentMethod PaymentMethod @default(CASH)
+  total         Float
+  notes         String?
+  createdAt     DateTime      @default(now())
+  barbershop    Barbershop @relation(fields: [barbershopId], references: [id])
+  client        Client?    @relation(fields: [clientId], references: [id])
+  items         SaleItem[]
+
+  @@map("sales")
+}
+
+model SaleItem {
+  id        String @id @default(cuid())
+  saleId    String
+  productId String
+  qty       Float
+  unitPrice Float
+  total     Float
+  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("sale_items")
+}
+
+model FinancialTransaction {
+  id           String          @id @default(cuid())
+  barbershopId String
+  type         TransactionType
+  category     String?
+  description  String
+  amount       Float
+  date         DateTime?
+  createdAt    DateTime        @default(now())
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  @@map("financial_transactions")
+}
+
+model RetentionConfig {
+  id           String   @id @default(cuid())
+  barbershopId String
+  defaultDays  Int      @default(30)
+  warningDays  Int      @default(7)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+
+  @@map("retention_configs")
+}
+
+model Notification {
+  id           String           @id @default(cuid())
+  barbershopId String
+  clientId     String?
+  type         NotificationType @default(GENERAL)
+  title        String
+  message      String
+  read         Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  client       Client?    @relation(fields: [clientId], references: [id])
+
+  @@map("notifications")
+}
+
+model BarberSchedule {
+  id        String   @id @default(cuid())
+  barberId  String
+  dayOfWeek Int      // 0=Dom, 1=Seg, 2=Ter, 3=Qua, 4=Qui, 5=Sex, 6=Sáb
+  startTime String   // "09:00"
+  endTime   String   // "18:00"
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  barber    Barber   @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, dayOfWeek])
+  @@map("barber_schedules")
+}

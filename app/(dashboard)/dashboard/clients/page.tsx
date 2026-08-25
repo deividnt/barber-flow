@@ -15,6 +15,35 @@ type ClientForm = { name: string; email: string; phone: string; birthDate: strin
 
 const emptyForm: ClientForm = { name: '', email: '', phone: '', birthDate: '', notes: '' }
 
+function ClientFormFields({ form, setForm }: { form: ClientForm; setForm: (f: ClientForm) => void }) {
+  return (
+    <div className="space-y-4 py-2">
+      <div>
+        <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
+        <Input placeholder="Nome completo" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Telefone</Label>
+          <Input placeholder="(11) 99999-9999" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Email</Label>
+          <Input placeholder="email@exemplo.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
+        </div>
+      </div>
+      <div>
+        <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nascimento</Label>
+        <Input type="date" value={form.birthDate} onChange={e => setForm({ ...form, birthDate: e.target.value })} />
+      </div>
+      <div>
+        <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Observações</Label>
+        <Input placeholder="Preferências, alergias, etc..." value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
+      </div>
+    </div>
+  )
+}
+
 export default function ClientsPage() {
   const [clients, setClients] = useState<any[]>([])
   const [search, setSearch] = useState('')
@@ -90,35 +119,6 @@ export default function ClientsPage() {
     c.phone?.includes(search) ||
     c.email?.toLowerCase().includes(search.toLowerCase())
   )
-
-  function ClientFormFields({ form, setForm }: { form: ClientForm; setForm: (f: ClientForm) => void }) {
-    return (
-      <div className="space-y-4 py-2">
-        <div>
-          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
-          <Input placeholder="Nome completo" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Telefone</Label>
-            <Input placeholder="(11) 99999-9999" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Email</Label>
-            <Input placeholder="email@exemplo.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-          </div>
-        </div>
-        <div>
-          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nascimento</Label>
-          <Input type="date" value={form.birthDate} onChange={e => setForm({ ...form, birthDate: e.target.value })} />
-        </div>
-        <div>
-          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Observações</Label>
-          <Input placeholder="Preferências, alergias, etc..." value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="flex-1">

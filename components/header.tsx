@@ -18,7 +18,7 @@ export function Header({ title, subtitle }: HeaderProps) {
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="flex items-center justify-between px-8 py-5"
+      className="flex items-center justify-between px-4 md:px-8 py-4 md:py-5"
       style={{
         background: '#0A0A0A',
         borderBottom: '1px solid #181818',

@@ -123,6 +123,7 @@ model Service {
   updatedAt    DateTime @updatedAt
   barbershop   Barbershop    @relation(fields: [barbershopId], references: [id])
   appointments Appointment[]
+  saleItems    SaleItem[]
 
   @@map("services")
 }
@@ -217,14 +218,17 @@ model Sale {
 }
 
 model SaleItem {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   saleId    String
-  productId String
+  productId String?
+  serviceId String?
+  itemName  String?
   qty       Float
   unitPrice Float
   total     Float
-  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id])
+  service   Service? @relation(fields: [serviceId], references: [id])
 
   @@map("sale_items")
 }

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
   LayoutDashboard, Calendar, Users, Package, DollarSign,
-  ShoppingCart, Bell, Settings, Scissors, BarChart3, LogOut, UserCog,
+  ShoppingCart, Bell, Settings, Scissors, BarChart3, LogOut, UserCog, UserCircle,
 } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { motion } from 'framer-motion'
@@ -23,6 +23,7 @@ const navItems = [
   { href: '/dashboard/finances',      label: 'Financeiro',   icon: DollarSign,      roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/reports',       label: 'Relatórios',   icon: BarChart3,       roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/notifications', label: 'Notificações', icon: Bell,            roles: ['ADMIN', 'BARBER'] },
+  { href: '/dashboard/profile',       label: 'Meu Perfil',   icon: UserCircle,      roles: ['BARBER'] },
   { href: '/dashboard/settings',      label: 'Configurações',icon: Settings,        roles: ['ADMIN'] },
 ]
 

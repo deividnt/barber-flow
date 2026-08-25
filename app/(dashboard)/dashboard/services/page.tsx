@@ -13,6 +13,48 @@ import { motion, AnimatePresence } from 'framer-motion'
 type ServiceForm = { name: string; description: string; price: string; durationMin: string }
 const emptyForm: ServiceForm = { name: '', description: '', price: '', durationMin: '30' }
 
+function ServiceFormFields({ form, setForm }: { form: ServiceForm; setForm: (f: ServiceForm) => void }) {
+  return (
+    <div className="space-y-4 py-2">
+      <div>
+        <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
+        <Input
+          placeholder="Ex: Corte Masculino"
+          value={form.name}
+          onChange={e => setForm({ ...form, name: e.target.value })}
+        />
+      </div>
+      <div>
+        <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Descrição</Label>
+        <Input
+          placeholder="Descrição do serviço"
+          value={form.description}
+          onChange={e => setForm({ ...form, description: e.target.value })}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço (R$) *</Label>
+          <Input
+            type="number"
+            placeholder="0,00"
+            value={form.price}
+            onChange={e => setForm({ ...form, price: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Duração (min)</Label>
+          <Input
+            type="number"
+            value={form.durationMin}
+            onChange={e => setForm({ ...form, durationMin: e.target.value })}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function ServicesPage() {
   const [services, setServices] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -97,48 +139,6 @@ export default function ServicesPage() {
     setDeleteTarget(null)
     setDeleting(false)
     load()
-  }
-
-  function ServiceFormFields({ form, setForm }: { form: ServiceForm; setForm: (f: ServiceForm) => void }) {
-    return (
-      <div className="space-y-4 py-2">
-        <div>
-          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
-          <Input
-            placeholder="Ex: Corte Masculino"
-            value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
-          />
-        </div>
-        <div>
-          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Descrição</Label>
-          <Input
-            placeholder="Descrição do serviço"
-            value={form.description}
-            onChange={e => setForm({ ...form, description: e.target.value })}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço (R$) *</Label>
-            <Input
-              type="number"
-              placeholder="0,00"
-              value={form.price}
-              onChange={e => setForm({ ...form, price: e.target.value })}
-            />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Duração (min)</Label>
-            <Input
-              type="number"
-              value={form.durationMin}
-              onChange={e => setForm({ ...form, durationMin: e.target.value })}
-            />
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (

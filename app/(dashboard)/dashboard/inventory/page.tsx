@@ -13,6 +13,45 @@ import { motion, AnimatePresence } from 'framer-motion'
 type ProductForm = { name: string; category: string; unit: string; costPrice: string; salePrice: string; stockQty: string; minStock: string }
 const emptyForm: ProductForm = { name: '', category: '', unit: 'UN', costPrice: '', salePrice: '', stockQty: '0', minStock: '0' }
 
+function ProductFormFields({ form, setForm, showStock }: { form: any; setForm: (f: any) => void; showStock?: boolean }) {
+  return (
+    <div className="space-y-3 py-2">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="col-span-2">
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
+          <Input placeholder="Nome do produto" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Categoria</Label>
+          <Input placeholder="Ex: Pomada" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Unidade</Label>
+          <Input placeholder="UN" value={form.unit} onChange={e => setForm({ ...form, unit: e.target.value })} />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço custo</Label>
+          <Input type="number" placeholder="0.00" value={form.costPrice} onChange={e => setForm({ ...form, costPrice: e.target.value })} />
+        </div>
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço venda</Label>
+          <Input type="number" placeholder="0.00" value={form.salePrice} onChange={e => setForm({ ...form, salePrice: e.target.value })} />
+        </div>
+        {showStock && (
+          <div>
+            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Estoque inicial</Label>
+            <Input type="number" value={form.stockQty} onChange={e => setForm({ ...form, stockQty: e.target.value })} />
+          </div>
+        )}
+        <div>
+          <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Estoque mínimo</Label>
+          <Input type="number" value={form.minStock} onChange={e => setForm({ ...form, minStock: e.target.value })} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function InventoryPage() {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -108,45 +147,6 @@ export default function InventoryPage() {
   }
 
   const lowStock = products.filter(p => p.stockQty <= p.minStock)
-
-  function ProductFormFields({ form, setForm, showStock }: { form: any; setForm: (f: any) => void; showStock?: boolean }) {
-    return (
-      <div className="space-y-3 py-2">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2">
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Nome *</Label>
-            <Input placeholder="Nome do produto" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Categoria</Label>
-            <Input placeholder="Ex: Pomada" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Unidade</Label>
-            <Input placeholder="UN" value={form.unit} onChange={e => setForm({ ...form, unit: e.target.value })} />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço custo</Label>
-            <Input type="number" placeholder="0.00" value={form.costPrice} onChange={e => setForm({ ...form, costPrice: e.target.value })} />
-          </div>
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Preço venda</Label>
-            <Input type="number" placeholder="0.00" value={form.salePrice} onChange={e => setForm({ ...form, salePrice: e.target.value })} />
-          </div>
-          {showStock && (
-            <div>
-              <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Estoque inicial</Label>
-              <Input type="number" value={form.stockQty} onChange={e => setForm({ ...form, stockQty: e.target.value })} />
-            </div>
-          )}
-          <div>
-            <Label className="text-xs font-medium mb-1.5 block" style={{ color: '#A1A1AA' }}>Estoque mínimo</Label>
-            <Input type="number" value={form.minStock} onChange={e => setForm({ ...form, minStock: e.target.value })} />
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="flex-1">

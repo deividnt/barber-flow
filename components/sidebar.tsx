@@ -16,7 +16,7 @@ const navItems = [
   { href: '/dashboard',               label: 'Dashboard',    icon: LayoutDashboard, roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/appointments',  label: 'Agendamentos', icon: Calendar,        roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/clients',       label: 'Clientes',     icon: Users,           roles: ['ADMIN', 'BARBER'] },
-  { href: '/dashboard/services',      label: 'Serviços',     icon: Scissors,        roles: ['ADMIN'] },
+  { href: '/dashboard/services',      label: 'Serviços',     icon: Scissors,        roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/team',          label: 'Equipe',       icon: UserCog,         roles: ['ADMIN'] },
   { href: '/dashboard/inventory',     label: 'Estoque',      icon: Package,         roles: ['ADMIN', 'BARBER'] },
   { href: '/dashboard/sales',         label: 'PDV / Vendas', icon: ShoppingCart,    roles: ['ADMIN', 'BARBER'] },
